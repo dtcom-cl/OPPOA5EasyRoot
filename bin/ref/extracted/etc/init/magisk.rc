@@ -1,0 +1,14 @@
+# Magisk On System - 官方单段式
+# post-fs-data (zygote 启动前) 一次性执行 setup-magisk.sh:
+#   初始化环境 -> magisk --post-fs-data(挂载模块) -> --service -> --boot-complete -> --zygote-restart
+service magisk-setup /system/bin/sh /system/etc/setup-magisk.sh
+    class core
+    user root
+    group root
+    oneshot
+    disabled
+    seclabel u:r:su:s0
+
+on post-fs-data
+    setprop magisk.setup.triggered 1
+    start magisk-setup

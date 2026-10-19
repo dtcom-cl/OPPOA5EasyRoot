@@ -1,0 +1,114 @@
+CREDITS / third-party notices for bin\tools\
+================================================================
+This folder is the ONLY place the toolkit takes its external tools from:
+bin\toolkit.ps1 and bin\lib\*.ps1 resolve adb and the image tools from here
+only. Nothing is read from outside the project and no PATH / environment
+variable is used, so the whole toolkit can be moved to any folder.
+
+Sources are described by toolchain name and relative folder only - no
+absolute paths of the author machine are recorded here.
+
+File sizes are the measured sizes at the time of packaging.
+
+FILE                      BYTES  SHA256
+-------------------- ----------  ----------------------------------------------------------------
+adb.exe                 5969000  0E606318957BAAC81B997CCD8EE4BCDFF79964A9921DA07C716AEA3E8D856AF7
+AdbWinApi.dll            108136  DB92F418F6C384FAEEBCCADBC592FB339AF3D51ECFEC3EC04BD3572080247BAE
+AdbWinUsbApi.dll          73320  3BA13420D47C60D958E0D5B333440F9895704879BB7C983B55F195717F621A3E
+cygwin1.dll             3012149  AB77212A71C2E2E8B870452D2C32BC72A6708D6E963DD3EBE2AC1A946CFFC242
+devprg_450              1048576  571351495EDE00053CBB3669B31F65037E3440479190A621008999675C847FF9
+fh_loader.exe            481280  22507A0B28C2B4FB4FAC227F06D8A504AFC1CEEB7173920F9DA7379F73BC5DBA
+img2simg.exe             226816  D3AE76C5543188B1EF80AD8425B497CD994678CBEAAF7A755B5AC0618D60A8D4
+imgkit.exe              2787328  FFDB37DA0C83BE72F6F9A999A385F7614F1D626659EAF30ECA9068D395928281
+make_ext4fs.exe          262144  79A85C1FE5B9F0D7621DC0284D8FC203A1DA6D06E2CEAC6B55564E1F8C23EA60
+QSaharaServer.exe        214016  F1274519D963995BB67BBF6394583B42C2B9182572FCB33B450BB818DC838DBD
+reset.xml                    59  271D3B083B608BF265D7DD2A13BE553772C49B1C63B00D1AF98774EEBF61FCAE
+simg2img.exe             525824  5D840C8352D3790712B68077AB5E224D190737DD6ADD80541E6A871B6B205546
+
+---- SOURCE / VERSION ----
+
+[adb.exe]  5969000 bytes
+  Source : Android platform-tools (AOSP). Shipped inside the third-party "Qualcomm toolbox" toolchain, folder bin\tool\Win.
+  Version: Android Debug Bridge; `adb.exe version` = Android Debug Bridge version 1.0.41 / Version 35.0.2-12147458; Authenticode signature: Valid
+
+[AdbWinApi.dll]  108136 bytes
+  Source : Android platform-tools (AOSP). Shipped inside the third-party "Qualcomm toolbox" toolchain, folder bin\tool\Win.
+  Version: adb USB interface library (one of the three standard Windows files); file version 2.0.0.0 (Google, inc); signature: Valid
+
+[AdbWinUsbApi.dll]  73320 bytes
+  Source : Android platform-tools (AOSP). Shipped inside the third-party "Qualcomm toolbox" toolchain, folder bin\tool\Win.
+  Version: adb USB driver interface library; file version 2.0.0.1 (Google, inc); signature: Valid
+
+[cygwin1.dll]  3012149 bytes
+  Source : MIO-KITCHEN-4.1.9-v2 toolchain, folder Windows\AMD64 (third-party bundle).
+  Version: Cygwin runtime, hard dependency of img2simg.exe (measured: img2simg.exe alone exits with 0xC0000135 DLL-not-found); file version 3.5.3 (Red Hat); unsigned
+
+[devprg_450]  1048576 bytes
+  Source : Qualcomm firehose programmer for Snapdragon 450 (original file of this toolkit).
+  Version: Firehose programmer image (Snapdragon 450)
+
+[fh_loader.exe]  481280 bytes
+  Source : Qualcomm firehose flashing tool (original file of this toolkit).
+  Version: Qualcomm firehose flashing tool
+
+[img2simg.exe]  226816 bytes
+  Source : MIO-KITCHEN-4.1.9-v2 toolchain, folder Windows\AMD64 (third-party bundle).
+  Version: Self-reports usage only; unsigned; REQUIRES cygwin1.dll in the same folder
+
+[imgkit.exe]  2787328 bytes
+  Source : MIO-KITCHEN-4.1.9-v2 toolchain, folder Windows\AMD64 (third-party bundle).
+  Version: No version string; `--help` says "Android image tool - unpack and pack Super/F2FS/EXT4/EROFS images"; unsigned
+
+[make_ext4fs.exe]  262144 bytes
+  Source : MIO-KITCHEN-4.1.9-v2 toolchain, folder Windows\AMD64 (third-party bundle).
+  Version: AOSP ext4 packer; no version string; unsigned
+
+[QSaharaServer.exe]  214016 bytes
+  Source : Qualcomm Sahara boot pusher (original file of this toolkit).
+  Version: Qualcomm Sahara boot pusher
+
+[reset.xml]  59 bytes
+  Source : Original file of this toolkit.
+  Version: Firehose reset command
+
+[simg2img.exe]  525824 bytes
+  Source : MIO-KITCHEN-4.1.9-v2 toolchain, folder Windows\AMD64 (third-party bundle).
+  Version: Self-reports "Modified version from android-15.0.0_r25 built by Rprop"; unsigned
+
+---- adb version (measured with "adb.exe version" in this folder) ----
+  Android Debug Bridge version 1.0.41
+  Version 35.0.2-12147458
+  The original output also prints an "Installed as <local path>" line; it was
+  left out here because it contains the author machine path and the Chinese
+  characters in it show up as garbage in the console code page.
+
+---- HOW THE MINIMAL FILE SET WAS DETERMINED (measured, not guessed) ----
+  1) imgkit.exe / make_ext4fs.exe / simg2img.exe / img2simg.exe were copied
+     alone into a clean temporary folder (no DLLs there) and executed:
+       imgkit.exe      -> printed its full usage text, exit code 2 = loads fine
+       make_ext4fs.exe -> actually read an fs_config and started building = loads fine
+       simg2img.exe    -> printed its version banner, exit code 1 = loads fine
+       img2simg.exe    -> exit code -1073741515 (0xC0000135, DLL not found) = missing runtime
+  2) After adding cygwin1.dll: img2simg.exe printed its usage; a 1 MB
+     img2simg -> simg2img round trip produced an identical SHA256 (lossless).
+  3) Conclusion: imgkit / make_ext4fs / simg2img need no extra DLL;
+     img2simg.exe needs cygwin1.dll, so cygwin1.dll ships too.
+     adb: adb.exe alone can run "version" and "start-server", but USB device
+     enumeration needs AdbWinApi.dll / AdbWinUsbApi.dll (the official Windows
+     release ships all three), so all three ship together.
+
+---- REDISTRIBUTION / LICENSE RISK (IMPORTANT) ----
+  * adb.exe / AdbWinApi.dll / AdbWinUsbApi.dll come from the official Android
+    platform-tools, licensed under Apache-2.0; Authenticode signatures verify
+    as Valid on this machine. Lowest redistribution risk.
+  * imgkit.exe / make_ext4fs.exe / simg2img.exe / img2simg.exe were extracted
+    from a third-party bundle (MIO-KITCHEN) and are all unsigned. make_ext4fs /
+    simg2img / img2simg originate from AOSP (Apache-2.0); the license and origin
+    of imgkit.exe are not stated inside the bundle. Verify these before any
+    public redistribution of the whole toolkit.
+  * cygwin1.dll belongs to the Cygwin project (Red Hat) and is distributed
+    under a GPL-family license with a linking exception; see the official Cygwin
+    license text for the exact terms. Check the obligations before redistributing.
+  * The author of this toolkit holds no official authorization from any of the
+    projects above. This file only records origin and measured facts; it is not
+    a license conclusion. Evaluate the risk yourself.

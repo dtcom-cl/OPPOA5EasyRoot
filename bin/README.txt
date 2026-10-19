@@ -1,0 +1,1 @@
+Internal runtime files for the toolkit. Do not edit, move, add or delete anything in this folder - the toolkit needs every file exactly where it is. To use the toolkit, run ..\双击运行.bat from the project root.
